@@ -6880,7 +6880,12 @@ Terminal::widget_button_press(GdkEventButton *event)
                                     !m_selection_resolved.empty()) {
 					extend_selecting = TRUE;
 				} else {
-					start_selecting = TRUE;
+					auto cursor_in_selection = m_has_selection \
+								   && m_selection_start.col <= rowcol.column() \
+								   && m_selection_start.row <= rowcol.row() \
+								   && rowcol.column() <= m_selection_end.col \
+								   && rowcol.row() <= m_selection_end.row;
+					start_selecting = !cursor_in_selection;
 				}
 			}
 			if (start_selecting) {
